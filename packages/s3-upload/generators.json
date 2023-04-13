@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "s3-upload",
+  "version": "0.0.1",
+  "generators": {
+    "s3-upload": {
+      "factory": "./src/generators/s3-upload/generator",
+      "schema": "./src/generators/s3-upload/schema.json",
+      "description": "s3-upload generator"
+    }
+  }
+}
