@@ -25,11 +25,6 @@
           },
           {
             "input": "./packages/s3-upload",
-            "glob": "generators.json",
-            "output": "."
-          },
-          {
-            "input": "./packages/s3-upload",
             "glob": "executors.json",
             "output": "."
           }

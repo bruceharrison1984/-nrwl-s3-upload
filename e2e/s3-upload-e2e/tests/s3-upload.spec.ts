@@ -4,9 +4,9 @@ import {
   readJson,
   runNxCommandAsync,
   uniq,
-} from "@nrwl/nx-plugin/testing";
+} from '@nrwl/nx-plugin/testing';
 
-describe("s3-upload e2e", () => {
+describe('s3-upload e2e', () => {
   // Setting up individual workspaces per
   // test can cause e2e runs to take a long time.
   // For this reason, we recommend each suite only
@@ -14,43 +14,19 @@ describe("s3-upload e2e", () => {
   // on a unique project in the workspace, such that they
   // are not dependant on one another.
   beforeAll(() => {
-    ensureNxProject("@nrwl/s3-upload", "dist/packages/s3-upload");
+    ensureNxProject('@nrwl/s3-upload', 'dist/packages/s3-upload');
   });
 
   afterAll(() => {
     // `nx reset` kills the daemon, and performs
     // some work which can help clean up e2e leftovers
-    runNxCommandAsync("reset");
+    runNxCommandAsync('reset');
   });
 
-  it("should create s3-upload", async () => {
-    const project = uniq("s3-upload");
+  it('should create s3-upload', async () => {
+    const project = uniq('s3-upload');
     await runNxCommandAsync(`generate @nrwl/s3-upload:s3-upload ${project}`);
     const result = await runNxCommandAsync(`build ${project}`);
-    expect(result.stdout).toContain("Executor ran");
+    expect(result.stdout).toContain('Executor ran');
   }, 120000);
-
-  describe("--directory", () => {
-    it("should create src in the specified directory", async () => {
-      const project = uniq("s3-upload");
-      await runNxCommandAsync(
-        `generate @nrwl/s3-upload:s3-upload ${project} --directory subdir`
-      );
-      expect(() =>
-        checkFilesExist(`libs/subdir/${project}/src/index.ts`)
-      ).not.toThrow();
-    }, 120000);
-  });
-
-  describe("--tags", () => {
-    it("should add tags to the project", async () => {
-      const projectName = uniq("s3-upload");
-      ensureNxProject("@nrwl/s3-upload", "dist/packages/s3-upload");
-      await runNxCommandAsync(
-        `generate @nrwl/s3-upload:s3-upload ${projectName} --tags e2etag,e2ePackage`
-      );
-      const project = readJson(`libs/${projectName}/project.json`);
-      expect(project.tags).toEqual(["e2etag", "e2ePackage"]);
-    }, 120000);
-  });
 });

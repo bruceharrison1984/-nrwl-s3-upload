@@ -5,6 +5,23 @@
   "title": "Build executor",
   "description": "",
   "type": "object",
-  "properties": {},
-  "required": []
+  "properties": {
+    "sourceFiles": {
+      "type": "string",
+      "description": "The path to the local files that you wish to upload. In the case of a static site, these should already be compiled (ie webpack)."
+    },
+    "bucketName": {
+      "type": "string",
+      "description": "The name of the S3 bucket where the files should be uploaded."
+    },
+    "region": {
+      "type": "string",
+      "description": "The AWS region where requests will be sent. Optional, will default to the local system default."
+    },
+    "profile": {
+      "type": "string",
+      "description": "The AWS credentials profile that will be used to make requests. Optional, default system credentials will be used if omitted."
+    }
+  },
+  "required": ["sourceFiles", "bucketArn"]
 }
