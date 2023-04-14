@@ -1,5 +1,7 @@
 # nx-s3-plugin
 
+[![npm](https://img.shields.io/npm/v/nx-s3-plugin)](https://www.npmjs.com/package/nx-s3-plugin)
+
 This is an NX executor that can be used to make changes to remote S3 buckets.
 
 ## Installation
@@ -12,9 +14,9 @@ npm i nx-s3-plugin
 
 ## Executors
 
-| Name | Description                                          |
-| ---- | ---------------------------------------------------- |
-| sync | Syncronize a local directory with a remote S3 bucket |
+| Name | Description                                           |
+| ---- | ----------------------------------------------------- |
+| sync | Synchronize a local directory with a remote S3 bucket |
 
 ## `sync`
 
