@@ -13,6 +13,7 @@ export default async function runExecutor({
   profile,
   batchSize = 500,
   progress = true,
+  deleteFiles = true,
 }: BuildExecutorSchema) {
   const fileList = await recursive(sourceFiles);
   const bucketUrl = `s3://${bucketName}`;
@@ -22,11 +23,13 @@ export default async function runExecutor({
       'File list contains no files. Please specify a different directory.'
     );
 
-  console.log('-= Running S3 Upload Executor =-');
+  console.log('-= Running S3 Sync Executor =-');
   console.log(`   - Total files: ${fileList.length}`);
   console.log(`   - Target: ${bucketUrl}`);
   console.log(`   - Batch size: ${batchSize}`);
+  console.log(`   - Deletion: ${deleteFiles ? 'ENABLED' : 'DISABLED'}`);
   console.log(`   - AWS profile: ${profile ? profile : 'DEFAULT'}`);
+  console.log(`   - AWS region: ${region ? region : 'DEFAULT'}`);
 
   const s3Client = new S3Client({
     region,
@@ -54,19 +57,21 @@ export default async function runExecutor({
   }
 
   try {
-    await sync(sourceFiles, bucketUrl, {
-      del: true,
+    const { uploads, deletions } = await sync(sourceFiles, bucketUrl, {
+      del: deleteFiles,
       monitor,
       maxConcurrentTransfers: batchSize,
       commandInput: {
         ContentType: (syncCommandInput) => lookup(syncCommandInput.Key) || '',
       },
     });
+
+    console.log(`-= S3 Sync Results =-`);
+    console.log(`   - Uploads: ${uploads.length}`);
+    console.log(`   - Deletions: ${deletions.length}`);
   } finally {
     progressBar.stop();
   }
-
-  console.log(`-= S3 Upload complete =-`);
 
   return {
     success: true,

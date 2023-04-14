@@ -5,4 +5,5 @@ export interface BuildExecutorSchema {
   profile?: string;
   batchSize?: number;
   progress?: boolean;
+  deleteFiles?: boolean;
 } // eslint-disable-line

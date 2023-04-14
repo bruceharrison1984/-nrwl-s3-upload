@@ -29,6 +29,10 @@
     "progress": {
       "type": "boolean",
       "description": "(Optional) Display upload progress. True by default."
+    },
+    "deleteFiles": {
+      "type": "boolean",
+      "description": "(Optional) Should files be deleted in S3 if they are no longer present in the local directory. True by default."
     }
   },
   "required": ["sourceFiles", "bucketName"]
