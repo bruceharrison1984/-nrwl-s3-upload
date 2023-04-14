@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "nx run s3-upload:build"
+    "build": "nx run nx-s3-plugin:build"
   },
   "private": true,
   "devDependencies": {

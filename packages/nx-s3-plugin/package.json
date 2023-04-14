@@ -1,5 +1,5 @@
 {
-  "name": "@nrwl/s3-upload",
+  "name": "nx-s3-plugin",
   "version": "0.0.1",
   "main": "src/index.js",
   "executors": "./executors.json"
