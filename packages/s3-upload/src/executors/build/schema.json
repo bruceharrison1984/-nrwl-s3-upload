@@ -23,5 +23,5 @@
       "description": "The AWS credentials profile that will be used to make requests. Optional, default system credentials will be used if omitted."
     }
   },
-  "required": ["sourceFiles", "bucketArn"]
+  "required": ["sourceFiles", "bucketName"]
 }
