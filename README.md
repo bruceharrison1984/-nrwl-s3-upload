@@ -18,6 +18,8 @@ npm i nx-s3-plugin
 
 ### `sync`
 
+<img style="padding: 1em; width: 70%; border: solid 1px grey; border-radius: 1em;" src="./docs/sync_example.png" />
+
 The `sync` executor is similar to the `aws s3 sync` command. It will run a diff between local files and files contained in S3, and make S3 reflect the local directory. This can be very performant because only files which have changed will be uploaded.
 
 #### Usage

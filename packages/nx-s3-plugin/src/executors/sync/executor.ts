@@ -23,13 +23,10 @@ export default async function runExecutor({
     );
 
   console.log('-= Running S3 Upload Executor =-');
-  console.log(`   - ${fileList.length} files will be uploaded to ${bucketUrl}`);
-  console.log(
-    profile
-      ? `   - AWS profile '${profile}' will be used`
-      : '   - Default system AWS profile will be used'
-  );
+  console.log(`   - Total files: ${fileList.length}`);
+  console.log(`   - Target: ${bucketUrl}`);
   console.log(`   - Batch size: ${batchSize}`);
+  console.log(`   - AWS profile: ${profile ? profile : 'DEFAULT'}`);
 
   const s3Client = new S3Client({
     region,
