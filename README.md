@@ -4,6 +4,8 @@ This is an NX executor that can be used to make changes to remote S3 buckets.
 
 ## Installation
 
+Install the plugin in to your already configured NX workspace
+
 ```sh
 npm i nx-s3-plugin
 ```

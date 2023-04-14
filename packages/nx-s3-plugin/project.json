@@ -12,17 +12,7 @@
         "main": "packages/nx-s3-plugin/src/index.ts",
         "tsConfig": "packages/nx-s3-plugin/tsconfig.lib.json",
         "assets": [
-          "packages/nx-s3-plugin/*.md",
-          {
-            "input": "./packages/nx-s3-plugin/src",
-            "glob": "**/!(*.ts)",
-            "output": "./src"
-          },
-          {
-            "input": "./packages/nx-s3-plugin/src",
-            "glob": "**/*.d.ts",
-            "output": "./src"
-          },
+          "README.md",
           {
             "input": "./packages/nx-s3-plugin",
             "glob": "executors.json",

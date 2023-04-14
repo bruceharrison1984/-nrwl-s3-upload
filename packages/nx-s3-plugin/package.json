@@ -2,5 +2,9 @@
   "name": "nx-s3-plugin",
   "version": "0.0.1",
   "main": "src/index.js",
-  "executors": "./executors.json"
+  "executors": "./executors.json",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/bruceharrison1984/nx-s3-plugin"
+  }
 }
