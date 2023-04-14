@@ -33,6 +33,7 @@ jobs:
 
       - name: Publish to NPM
         run: npm publish --access public
+        working-directory: ./dist/packages/nx-s3-plugin
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
 
