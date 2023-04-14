@@ -4,4 +4,5 @@ export interface BuildExecutorSchema {
   region?: string;
   profile?: string;
   chunkSize?: number;
+  progress?: boolean;
 } // eslint-disable-line

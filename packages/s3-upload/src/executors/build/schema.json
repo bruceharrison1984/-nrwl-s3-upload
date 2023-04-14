@@ -16,15 +16,19 @@
     },
     "region": {
       "type": "string",
-      "description": "The AWS region where requests will be sent. Optional, will default to the local system default."
+      "description": "(Optional) The AWS region where requests will be sent. Will default to the local system default."
     },
     "profile": {
       "type": "string",
-      "description": "The AWS credentials profile that will be used to make requests. Optional, default system credentials will be used if omitted."
+      "description": "(Optional) The AWS credentials profile that will be used to make requests. Default system AWS credentials will be used if omitted."
     },
     "chunkSize": {
       "type": "string",
-      "description": "The number of files that will be present in each chunk. Files in chunks are uploaded in parallel."
+      "description": "(Optional) The number of files that will be present in each chunk. Files in chunks are uploaded in parallel. Default is 500."
+    },
+    "progress": {
+      "type": "boolean",
+      "description": "(Optional) Display upload progress. True by default."
     }
   },
   "required": ["sourceFiles", "bucketName"]
