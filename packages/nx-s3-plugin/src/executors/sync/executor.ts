@@ -30,6 +30,7 @@ export default async function runExecutor({
   console.log(`   - Deletion: ${deleteFiles ? 'ENABLED' : 'DISABLED'}`);
   console.log(`   - AWS profile: ${profile ? profile : 'DEFAULT'}`);
   console.log(`   - AWS region: ${region ? region : 'DEFAULT'}`);
+  console.log(' ');
 
   const s3Client = new S3Client({
     region,
@@ -56,8 +57,9 @@ export default async function runExecutor({
     });
   }
 
+  let results;
   try {
-    const { uploads, deletions } = await sync(sourceFiles, bucketUrl, {
+    results = await sync(sourceFiles, bucketUrl, {
       del: deleteFiles,
       monitor,
       maxConcurrentTransfers: batchSize,
@@ -65,13 +67,14 @@ export default async function runExecutor({
         ContentType: (syncCommandInput) => lookup(syncCommandInput.Key) || '',
       },
     });
-
-    console.log(`-= S3 Sync Results =-`);
-    console.log(`   - Uploads: ${uploads.length}`);
-    console.log(`   - Deletions: ${deletions.length}`);
   } finally {
     progressBar.stop();
   }
+
+  console.log(' ');
+  console.log(`-= S3 Sync Results =-`);
+  console.log(`   - Uploads: ${results.uploads.length}`);
+  console.log(`   - Deletions: ${results.deletions.length}`);
 
   return {
     success: true,
