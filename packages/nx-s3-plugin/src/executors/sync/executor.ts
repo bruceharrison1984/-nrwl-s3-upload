@@ -15,8 +15,11 @@ export default async function runExecutor({
   progress = true,
   deleteFiles = true,
 }: BuildExecutorSchema) {
+  if (!bucketName || bucketName.trim() === '')
+    throw new Error('bucketName is a required argument');
+
   const fileList = await recursive(sourceFiles);
-  const bucketUrl = `s3://${bucketName}`;
+  const bucketUrl = `s3://${bucketName.trim()}`;
 
   if (fileList.length === 0)
     throw new Error(
