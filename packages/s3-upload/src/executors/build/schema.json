@@ -21,6 +21,10 @@
     "profile": {
       "type": "string",
       "description": "The AWS credentials profile that will be used to make requests. Optional, default system credentials will be used if omitted."
+    },
+    "chunkSize": {
+      "type": "string",
+      "description": "The number of files that will be present in each chunk. Files in chunks are uploaded in parallel."
     }
   },
   "required": ["sourceFiles", "bucketName"]

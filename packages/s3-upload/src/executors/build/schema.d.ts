@@ -3,4 +3,5 @@ export interface BuildExecutorSchema {
   bucketName: string;
   region?: string;
   profile?: string;
+  chunkSize?: number;
 } // eslint-disable-line
