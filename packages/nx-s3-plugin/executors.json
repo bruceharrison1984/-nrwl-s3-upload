@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
   "executors": {
-    "upload": {
+    "sync": {
       "implementation": "./src/executors/sync/executor",
       "schema": "./src/executors/sync/schema.json",
       "description": "NX executor that is used to sync local files with S3 buckets"

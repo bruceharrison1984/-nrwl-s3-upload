@@ -42,7 +42,7 @@ Add the executor to the `target` section of `project.json`.
 | bucketName  | The name of the S3 bucket where the files should be uploaded.                                                                      |
 | region      | (Optional) The AWS region where requests will be sent. Will default to the local system default.                                   |
 | profile     | (Optional) The AWS credentials profile that will be used to make requests. Default system AWS credentials will be used if omitted. |
-| chunkSize   | (Optional) The number of files that will be present in each chunk. Files in chunks are uploaded in parallel. Default is 500.       |
+| batchSize   | (Optional) The number of files that will be present in each batch. Batched files are uploaded in parallel. Default is 500.         |
 | progress    | (Optional) Display upload progress. True by default.                                                                               |
 
 ## Building

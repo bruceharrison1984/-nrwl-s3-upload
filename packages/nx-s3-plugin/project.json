@@ -14,6 +14,16 @@
         "assets": [
           "README.md",
           {
+            "input": "./packages/nx-s3-plugin/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./packages/nx-s3-plugin/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
             "input": "./packages/nx-s3-plugin",
             "glob": "executors.json",
             "output": "."

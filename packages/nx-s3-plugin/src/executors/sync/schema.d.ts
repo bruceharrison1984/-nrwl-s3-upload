@@ -3,6 +3,6 @@ export interface BuildExecutorSchema {
   bucketName: string;
   region?: string;
   profile?: string;
-  chunkSize?: number;
+  batchSize?: number;
   progress?: boolean;
 } // eslint-disable-line

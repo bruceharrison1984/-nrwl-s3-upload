@@ -11,7 +11,7 @@ export default async function runExecutor({
   bucketName,
   region,
   profile,
-  chunkSize = 500,
+  batchSize = 500,
   progress = true,
 }: BuildExecutorSchema) {
   const fileList = await recursive(sourceFiles);
@@ -23,14 +23,13 @@ export default async function runExecutor({
     );
 
   console.log('-= Running S3 Upload Executor =-');
-  console.log(
-    `   - '${fileList.length}' files will be uploaded to ${bucketUrl}`
-  );
+  console.log(`   - ${fileList.length} files will be uploaded to ${bucketUrl}`);
   console.log(
     profile
       ? `   - AWS profile '${profile}' will be used`
       : '   - Default system AWS profile will be used'
   );
+  console.log(`   - Batch size: ${batchSize}`);
 
   const s3Client = new S3Client({
     region,
@@ -61,7 +60,7 @@ export default async function runExecutor({
     await sync(sourceFiles, bucketUrl, {
       del: true,
       monitor,
-      maxConcurrentTransfers: chunkSize,
+      maxConcurrentTransfers: batchSize,
       commandInput: {
         ContentType: (syncCommandInput) => lookup(syncCommandInput.Key) || '',
       },

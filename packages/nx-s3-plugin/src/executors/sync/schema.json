@@ -22,9 +22,9 @@
       "type": "string",
       "description": "(Optional) The AWS credentials profile that will be used to make requests. Default system AWS credentials will be used if omitted."
     },
-    "chunkSize": {
+    "batchSize": {
       "type": "string",
-      "description": "(Optional) The number of files that will be present in each chunk. Files in chunks are uploaded in parallel. Default is 500."
+      "description": "(Optional) The number of files that will be present in each batch. Batched files are uploaded in parallel. Default is 500."
     },
     "progress": {
       "type": "boolean",
