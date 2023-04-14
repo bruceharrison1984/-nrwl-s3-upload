@@ -24,6 +24,7 @@ export default async function runExecutor({
     );
 
   console.log('-= Running S3 Sync Executor =-');
+  console.log(`   - Source directory: ${sourceFiles}`);
   console.log(`   - Total files: ${fileList.length}`);
   console.log(`   - Target: ${bucketUrl}`);
   console.log(`   - Batch size: ${batchSize}`);
