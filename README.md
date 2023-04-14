@@ -46,6 +46,7 @@ Add the executor to the `target` section of `project.json`.
 | profile     | (Optional) The AWS credentials profile that will be used to make requests. Default system AWS credentials will be used if omitted. |
 | batchSize   | (Optional) The number of files that will be present in each batch. Batched files are uploaded in parallel. Default is 500.         |
 | progress    | (Optional) Display upload progress. True by default.                                                                               |
+| deleteFiles | (Optional) Should files be deleted in S3 if they are no longer present in the local directory. True by default.                    |
 
 ## Building
 
