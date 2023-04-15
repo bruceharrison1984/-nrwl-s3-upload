@@ -28,7 +28,7 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
     );
 
   console.log(`
-    -= Running S3 Sync Executor =-
+-= Running S3 Sync Executor =-
   - Source directory: ${sourceFiles}
   - Total files: ${fileList.length}
   - Target: ${bucketUrl}
@@ -78,8 +78,9 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
     s3Client.destroy();
   }
 
+  console.log(' ');
   console.log(`
-    -= S3 Sync Results =-
+-= S3 Sync Results =-
   - Uploads: ${results.uploads.length}
   - Deletions: ${results.deletions.length}
   `);
