@@ -54,7 +54,9 @@ Add the executor to the `target` section of `project.json`.
 
 ### Cloudformation Lookup
 
-If you prepend your `bucketName` with `cfe:`, this executor will attempt to locate a CloudFormation export with the same name. If the export is found, the value will be used for the S3 destination bucket. If the export is not found, and error will be thrown. **This export must exist in the same account as the S3 bucket. Cross-account lookup is not supported.**
+If you prepend your `bucketName` with `cfe:`, this executor will attempt to locate a CloudFormation export with the same name. If the export is found, the value will be used for the S3 destination bucket. If the export is not found, and error will be thrown.
+
+**This export must exist in the same account as the S3 bucket. Cross-account lookup is not supported.**
 
 ```js
 // cfe export example
