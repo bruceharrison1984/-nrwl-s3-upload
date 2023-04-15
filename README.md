@@ -22,7 +22,7 @@ npm i nx-s3-plugin
 
 <img style="padding: 1em; width: 70%; border: solid 1px grey; border-radius: 1em;" src="./docs/sync_example.png" />
 
-The `sync` executor is similar to the `aws s3 sync` command. It will run a diff between local files and files contained in S3, and make S3 reflect the local directory. This can be very performant because only files which have changed will be uploaded.
+The `sync` executor is similar to the `aws s3 sync` command. It will run a diff between local files and files contained in S3, and make S3 reflect the local directory. This can be very performant because only files which have changed will be uploaded. Bucket name can also be dynamically looked up from existing CloudFormation exports.
 
 ### Properties
 
@@ -46,25 +46,17 @@ Add the executor to the `target` section of `project.json`.
       "executor": "nx-s3-plugin:sync",
       "options": {
         "sourceFiles": "<source-directory>",
-        "bucketName": "<target-bucket>",
+        "bucketName": "[cfe:]<target-bucket>",
       }
     }
   }
 ```
 
-### Cloudformation Lookup
+### Cloudformation Export Lookup
 
-If you prepend your `bucketName` with `cfe:`, this executor will attempt to locate a CloudFormation export with the same name. If the export is found, the value will be used for the S3 destination bucket. If the export is not found, and error will be thrown.
+If you prepend your `bucketName` with `cfe:`, this executor will attempt to locate a CloudFormation export with the same name. _Matching is not case-sensitive._
+
+- If an export is found with a matching name, the value will be used for the S3 destination bucket.
+- If an export is not found, an error will be thrown and no files will be uploaded.
 
 **This export must exist in the same account as the S3 bucket. Cross-account lookup is not supported.**
-
-```js
-// cfe export example
-    "upload-site": {
-      "executor": "nx-s3-plugin:sync",
-      "options": {
-        "sourceFiles": "<source-directory>",
-        "bucketName": "cfe:SomeExportedValue",
-      }
-    }
-```
