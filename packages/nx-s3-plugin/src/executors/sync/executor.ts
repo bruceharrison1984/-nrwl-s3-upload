@@ -1,12 +1,13 @@
 import { BuildExecutorSchema } from './schema';
+import { Executor } from '@nrwl/devkit';
+import { Presets, SingleBar } from 'cli-progress';
 import { S3Client } from '@aws-sdk/client-s3';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
-import S3SyncClient from 's3-sync-client';
-import { SingleBar, Presets } from 'cli-progress';
 import { lookup } from 'mime-types';
+import S3SyncClient from 's3-sync-client';
 import recursive from 'recursive-readdir';
 
-export default async function runExecutor({
+const runExecutor: Executor<BuildExecutorSchema> = async ({
   sourceFiles,
   bucketName,
   region,
@@ -14,7 +15,7 @@ export default async function runExecutor({
   batchSize = 500,
   progress = true,
   deleteFiles = true,
-}: BuildExecutorSchema) {
+}) => {
   if (!bucketName || bucketName.trim() === '')
     throw new Error('bucketName is a required argument');
 
@@ -26,15 +27,16 @@ export default async function runExecutor({
       'File list contains no files. Please specify a different directory.'
     );
 
-  console.log('-= Running S3 Sync Executor =-');
-  console.log(`   - Source directory: ${sourceFiles}`);
-  console.log(`   - Total files: ${fileList.length}`);
-  console.log(`   - Target: ${bucketUrl}`);
-  console.log(`   - Batch size: ${batchSize}`);
-  console.log(`   - Deletion: ${deleteFiles ? 'ENABLED' : 'DISABLED'}`);
-  console.log(`   - AWS profile: ${profile ? profile : 'DEFAULT'}`);
-  console.log(`   - AWS region: ${region ? region : 'DEFAULT'}`);
-  console.log(' ');
+  console.log(`
+    -= Running S3 Sync Executor =-
+  - Source directory: ${sourceFiles}
+  - Total files: ${fileList.length}
+  - Target: ${bucketUrl}
+  - Batch size: ${batchSize}
+  - Deletion: ${deleteFiles ? 'ENABLED' : 'DISABLED'}
+  - AWS profile: ${profile ? profile : 'DEFAULT'}
+  - AWS region: ${region ? region : 'DEFAULT'}
+  `);
 
   const s3Client = new S3Client({
     region,
@@ -73,14 +75,18 @@ export default async function runExecutor({
     });
   } finally {
     progressBar.stop();
+    s3Client.destroy();
   }
 
-  console.log(' ');
-  console.log(`-= S3 Sync Results =-`);
-  console.log(`   - Uploads: ${results.uploads.length}`);
-  console.log(`   - Deletions: ${results.deletions.length}`);
+  console.log(`
+    -= S3 Sync Results =-
+  - Uploads: ${results.uploads.length}
+  - Deletions: ${results.deletions.length}
+  `);
 
   return {
     success: true,
   };
-}
+};
+
+export default runExecutor;
