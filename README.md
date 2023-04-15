@@ -54,7 +54,7 @@ Add the executor to the `target` section of `project.json`.
 
 ### Cloudformation Export Lookup
 
-If you prepend your `bucketName` with `cfe:`, this executor will attempt to locate a CloudFormation export with the same name. _Matching is not case-sensitive._
+If you prepend your `bucketName` with `cfe:`, this executor will attempt to locate a CloudFormation export with the same name. _Matching is not case-sensitive._ Omitting the `cfe:` prefix will simply use the `bucketName` value as is for the S3 url.
 
 - If an export is found with a matching name, the value will be used for the S3 destination bucket.
 - If an export is not found, an error will be thrown and no files will be uploaded.
