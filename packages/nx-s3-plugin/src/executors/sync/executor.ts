@@ -3,6 +3,7 @@ import { Executor } from '@nrwl/devkit';
 import { Presets, SingleBar } from 'cli-progress';
 import { S3Client } from '@aws-sdk/client-s3';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { getCloudFormationExportValue } from './cloudformationExportLookup';
 import { lookup } from 'mime-types';
 import S3SyncClient from 's3-sync-client';
 import recursive from 'recursive-readdir';
@@ -16,19 +17,32 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
   progress = true,
   deleteFiles = true,
 }) => {
+  console.log('-= Running S3 Sync Executor =-');
   if (!bucketName || bucketName.trim() === '')
     throw new Error('bucketName is a required argument');
 
   const fileList = await recursive(sourceFiles);
-  const bucketUrl = `s3://${bucketName.trim()}`;
 
   if (fileList.length === 0)
     throw new Error(
-      'File list contains no files. Please specify a different directory.'
+      'File list contains no files. Please specify a different directory. '
     );
 
+  let bucketUrl: string;
+  const matches = bucketName.match(/^cfe:(.*)$/);
+  if (matches[1]) {
+    console.log('-= Detected CloudFormation export as bucketName =-');
+    const cfExportBucket = await getCloudFormationExportValue(
+      matches[1],
+      region,
+      profile
+    );
+    bucketUrl = `s3://${cfExportBucket.trim()}`;
+  } else {
+    bucketUrl = `s3://${bucketName.trim()}`;
+  }
+
   console.log(`
--= Running S3 Sync Executor =-
   - Source directory: ${sourceFiles}
   - Total files: ${fileList.length}
   - Target: ${bucketUrl}
