@@ -1,6 +1,6 @@
 {
   "name": "nx-s3-plugin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "src/index.js",
   "executors": "./executors.json",
   "license": "MIT",
