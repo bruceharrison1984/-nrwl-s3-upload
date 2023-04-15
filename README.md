@@ -68,7 +68,3 @@ If you prepend your `bucketName` with `cfe:`, this executor will attempt to loca
       }
     }
 ```
-
-## Building
-
-Run `npm run build` to build the library.
