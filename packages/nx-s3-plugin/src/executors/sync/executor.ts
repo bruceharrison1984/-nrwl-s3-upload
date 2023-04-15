@@ -30,8 +30,7 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
 
   let bucketUrl: string;
   const matches = bucketName.match(/^cfe:(.*)$/);
-  if (matches[1]) {
-    console.log('-= Detected CloudFormation export as bucketName =-');
+  if (matches) {
     const cfExportBucket = await getCloudFormationExportValue(
       matches[1],
       region,
@@ -43,9 +42,14 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
   }
 
   console.log(`
+  ${
+    matches
+      ? `- CF Export Lookup: ${matches[1]}`
+      : `- Bucket Name: ${bucketName}`
+  }
   - Source directory: ${sourceFiles}
   - Total files: ${fileList.length}
-  - Target: ${bucketUrl}
+  - S3 Url: ${bucketUrl}
   - Batch size: ${batchSize}
   - Deletion: ${deleteFiles ? 'ENABLED' : 'DISABLED'}
   - AWS profile: ${profile ? profile : 'DEFAULT'}
