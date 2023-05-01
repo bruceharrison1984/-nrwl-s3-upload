@@ -65,3 +65,17 @@ If you prepend your `bucketName` with `cfe:`, this executor will attempt to loca
 > Example:
 >
 > `cfe:StaticWebSite` will query CloudFormation for an export named `StaticWebSite` and use the value of that export as the `bucketName`.
+
+### SSM Paramter Store Lookup
+
+If you prepend your `bucketName` with `ssm:`, this executor will attempt to locate a SSM Paramter with the same name. Omitting the `ssm:` prefix will simply use the `bucketName` value as is for the S3 url.
+
+- If an SSM Parameter is found with a matching name, the value will be used for the S3 destination bucket.
+- If an SSM Parameter is not found, an error will be thrown and no files will be uploaded.
+- Matching is _not_ case-sensitive.
+- This SSM Parameter must exist in the same account as the S3 bucket.
+  - Cross-account lookup is not supported.
+
+> Example:
+>
+> `ssm:StaticWebSite` will query CloudFormation for an SSM Parameter named `StaticWebSite` and use the value of that export as the `bucketName`.
