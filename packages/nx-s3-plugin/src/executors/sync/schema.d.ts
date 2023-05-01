@@ -1,6 +1,6 @@
 export interface BuildExecutorSchema {
   sourceFiles: string;
-  bucketName: string;
+  bucketName?: string;
   region?: string;
   profile?: string;
   batchSize?: number;

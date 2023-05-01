@@ -12,7 +12,7 @@
     },
     "bucketName": {
       "type": "string",
-      "description": "The name of the S3 bucket where the files should be uploaded. Prefixing with 'cfe:', such as 'cfe:SomeS3Bucket', will lookup the value of SomeS3Bucket from Cloudformation exports. If the value doesn't exist, an error will be thrown."
+      "description": "The name of the S3 bucket where the files should be uploaded. Prefixes of 'cfe' and 'ssm' will perform lookups from CloudFormation and SSM Parameter store respectively."
     },
     "region": {
       "type": "string",

@@ -4,6 +4,7 @@ import { Presets, SingleBar } from 'cli-progress';
 import { S3Client } from '@aws-sdk/client-s3';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { getCloudFormationExportValue } from './cloudformationExportLookup';
+import { getSsmParameterStoreValue } from './ssmParameterLookup';
 import { lookup } from 'mime-types';
 import S3SyncClient from 's3-sync-client';
 import recursive from 'recursive-readdir';
@@ -28,28 +29,45 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
       'File list contains no files. Please specify a different directory. '
     );
 
-  let bucketUrl: string;
-  const matches = bucketName.match(/^cfe:(.*)$/);
+  let bucketUrl = `s3://${bucketName.trim()}`;
+  const matches = bucketName.match(/^(.{3}):(.*)$/);
   if (matches) {
-    const cfExportBucket = await getCloudFormationExportValue(
-      matches[1],
-      region,
-      profile
-    );
-    bucketUrl = `s3://${cfExportBucket.trim()}`;
-  } else {
-    bucketUrl = `s3://${bucketName.trim()}`;
+    switch (matches[1].toLowerCase()) {
+      case 'cfe': {
+        const cfExportBucket = await getCloudFormationExportValue(
+          matches[2],
+          region,
+          profile
+        );
+        bucketUrl = `s3://${cfExportBucket}`;
+        break;
+      }
+      case 'ssm': {
+        const ssmParamValue = await getSsmParameterStoreValue(
+          matches[2],
+          region,
+          profile
+        );
+        bucketUrl = `s3://${ssmParamValue}`;
+        break;
+      }
+      default:
+        throw new Error(
+          'Unknown bucketUrl prefix. Only cfe and ssm are supported.'
+        );
+    }
   }
 
+  let headerText = `- Bucket Name: ${bucketName}`;
+  if (matches)
+    headerText = `- Lookup Key: ${matches[2]}
+    - Lookup Type: ${matches[1].toLocaleLowerCase()}`;
+
   console.log(`
-  ${
-    matches
-      ? `- CF Export Lookup: ${matches[1]}`
-      : `- Bucket Name: ${bucketName}`
-  }
+  ${headerText}
+  - Destination S3 Url: ${bucketUrl}
   - Source directory: ${sourceFiles}
-  - Total files: ${fileList.length}
-  - S3 Url: ${bucketUrl}
+    - Total files: ${fileList.length}
   - Batch size: ${batchSize}
   - Deletion: ${deleteFiles ? 'ENABLED' : 'DISABLED'}
   - AWS profile: ${profile ? profile : 'DEFAULT'}
