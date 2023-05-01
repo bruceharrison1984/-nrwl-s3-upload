@@ -108,7 +108,7 @@ If you prepend your `bucketName` with `ssm:`, this executor will attempt to loca
 
 > Example:
 >
-> `ssm:/myapp/s3bucket` will query CloudFormation for an SSM Parameter named `/myapp/s3bucket` and use the value of that export as the `bucketName`.
+> `ssm:/myapp/s3bucket` will query for an SSM Parameter named `/myapp/s3bucket` and use the value of that export as the `bucketName`.
 
 ```js
   "targets": {
