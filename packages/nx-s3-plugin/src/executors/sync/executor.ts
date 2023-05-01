@@ -32,7 +32,7 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
   let bucketUrl = `s3://${bucketName.trim()}`;
   const matches = bucketName.match(/^(.{3}):(.*)$/);
   if (matches) {
-    switch (matches[1]) {
+    switch (matches[1].toLowerCase()) {
       case 'cfe': {
         const cfExportBucket = await getCloudFormationExportValue(
           matches[2],
@@ -58,16 +58,16 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
     }
   }
 
+  let headerText = `- Bucket Name: ${bucketName}`;
+  if (matches)
+    headerText = `- Lookup Key: ${matches[2]}
+    - Lookup Type: ${matches[1].toLocaleLowerCase()}`;
+
   console.log(`
-  ${
-    matches
-      ? `- Lookup Key: ${matches[2]}
-         - Lookup Type: ${matches[1]}`
-      : `- Bucket Name: ${bucketName}`
-  }
+  ${headerText}
+  - Destination S3 Url: ${bucketUrl}
   - Source directory: ${sourceFiles}
-  - Total files: ${fileList.length}
-  - S3 Url: ${bucketUrl}
+    - Total files: ${fileList.length}
   - Batch size: ${batchSize}
   - Deletion: ${deleteFiles ? 'ENABLED' : 'DISABLED'}
   - AWS profile: ${profile ? profile : 'DEFAULT'}
