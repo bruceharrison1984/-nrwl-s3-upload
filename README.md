@@ -76,7 +76,7 @@ If you prepend your `bucketName` with `cfe:`, this executor will attempt to loca
 
 - If an export is found with a matching name, the value will be used for the S3 destination bucket.
 - If an export is not found, an error will be thrown and no files will be uploaded.
-- Matching is _not_ case-sensitive.
+- **Matching is _not_ case-sensitive.**
 - This export must exist in the same account as the S3 bucket.
   - Cross-account lookup is not supported.
 
@@ -102,7 +102,7 @@ If you prepend your `bucketName` with `ssm:`, this executor will attempt to loca
 
 - If an SSM Parameter is found with a matching name, the value will be used for the S3 destination bucket.
 - If an SSM Parameter is not found, an error will be thrown and no files will be uploaded.
-- Matching is _not_ case-sensitive.
+- **Matching is case-sensitive.**
 - This SSM Parameter must exist in the same account as the S3 bucket.
   - Cross-account lookup is not supported.
 
