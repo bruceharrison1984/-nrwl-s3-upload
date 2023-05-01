@@ -54,7 +54,23 @@ Add the executor to the `target` section of `project.json`.
   }
 ```
 
-### Cloudformation Export Lookup
+### Static S3 Bucket Name
+
+If you are directly targetting an S3 bucket, you can simply enter the name for the `bucketName` parameter in the NX task definition.
+
+```js
+  "targets": {
+    "upload-site": {
+      "executor": "nx-s3-plugin:sync",
+      "options": {
+        "sourceFiles": "/my-compiled-website-files",
+        "bucketName": "my-s3-bucket",
+      }
+    }
+  }
+```
+
+### Dynamic Cloudformation Export Lookup
 
 If you prepend your `bucketName` with `cfe:`, this executor will attempt to locate a CloudFormation export with the same name. Omitting the `cfe:` prefix will simply use the `bucketName` value as is for the S3 url.
 
@@ -80,7 +96,7 @@ If you prepend your `bucketName` with `cfe:`, this executor will attempt to loca
   }
 ```
 
-### SSM Paramter Store Lookup
+### Dynamic SSM Paramter Store Lookup
 
 If you prepend your `bucketName` with `ssm:`, this executor will attempt to locate a SSM Paramter with the same name. Omitting the `ssm:` prefix will simply use the `bucketName` value as is for the S3 url.
 
