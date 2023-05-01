@@ -56,7 +56,7 @@ Add the executor to the `target` section of `project.json`.
 
 ### Static S3 Bucket Name
 
-If you are directly targetting an S3 bucket, you can simply enter the name for the `bucketName` parameter in the NX task definition.
+If you are directly targetting an S3 bucket, you can simply enter the name of the S3 bucket as the `bucketName` parameter in the NX task definition.
 
 ```js
   "targets": {
