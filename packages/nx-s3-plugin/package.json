@@ -1,5 +1,10 @@
 {
   "name": "nx-s3-plugin",
+  "keywords": [
+    "nx",
+    "s3",
+    "sync"
+  ],
   "version": "1.0.6",
   "main": "src/index.js",
   "executors": "./executors.json",
