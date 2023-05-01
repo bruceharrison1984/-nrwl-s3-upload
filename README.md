@@ -54,6 +54,10 @@ Add the executor to the `target` section of `project.json`.
   }
 ```
 
+### Uploaded Bucket Object `content-type`
+
+This plugin uses [mime-types](https://www.npmjs.com/package/mime-types) to make a best guess at file mime types as they are uploaded to S3. This means your files should arrive in S3, ready to be served as a static assets without having to manually define the types.
+
 ### Static S3 Bucket Name
 
 If you are directly targetting an S3 bucket, you can simply enter the name of the S3 bucket as the `bucketName` parameter in the NX task definition.
