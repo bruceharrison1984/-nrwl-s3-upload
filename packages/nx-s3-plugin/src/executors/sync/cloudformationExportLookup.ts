@@ -34,5 +34,5 @@ export const getCloudFormationExportValue = async (
       `A CloudFormation export named ${exportName} could not be found`
     );
 
-  return cfExport.Value;
+  return cfExport.Value.trim();
 };
