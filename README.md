@@ -38,6 +38,8 @@ The `sync` executor is similar to the `aws s3 sync` command. It will run a diff 
 
 ### Usage
 
+_You do not need to add `s3://` to bucketName, your CloudFormation export value, or your SSM parameter value. This plugin will add it for you._
+
 Add the executor to the `target` section of `project.json`.
 
 ```js
@@ -66,6 +68,18 @@ If you prepend your `bucketName` with `cfe:`, this executor will attempt to loca
 >
 > `cfe:StaticWebSite` will query CloudFormation for an export named `StaticWebSite` and use the value of that export as the `bucketName`.
 
+```js
+  "targets": {
+    "upload-site": {
+      "executor": "nx-s3-plugin:sync",
+      "options": {
+        "sourceFiles": "/my-compiled-website-files",
+        "bucketName": "cfe:StaticWebSite",
+      }
+    }
+  }
+```
+
 ### SSM Paramter Store Lookup
 
 If you prepend your `bucketName` with `ssm:`, this executor will attempt to locate a SSM Paramter with the same name. Omitting the `ssm:` prefix will simply use the `bucketName` value as is for the S3 url.
@@ -78,4 +92,16 @@ If you prepend your `bucketName` with `ssm:`, this executor will attempt to loca
 
 > Example:
 >
-> `ssm:StaticWebSite` will query CloudFormation for an SSM Parameter named `StaticWebSite` and use the value of that export as the `bucketName`.
+> `ssm:/myapp/s3bucket` will query CloudFormation for an SSM Parameter named `/myapp/s3bucket` and use the value of that export as the `bucketName`.
+
+```js
+  "targets": {
+    "upload-site": {
+      "executor": "nx-s3-plugin:sync",
+      "options": {
+        "sourceFiles": "/my-compiled-website-files",
+        "bucketName": "ssm:/myapp/s3bucket",
+      }
+    }
+  }
+```
