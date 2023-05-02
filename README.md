@@ -24,6 +24,14 @@ npm i nx-s3-plugin
 
 The `sync` executor is similar to the `aws s3 sync` command. It will run a diff between local files and files contained in S3, and make S3 reflect the local directory. This can be very performant because only files which have changed will be uploaded. Bucket name can also be dynamically looked up from existing CloudFormation exports or SSM Parameters.
 
+### Uploaded Bucket Object `content-type`
+
+This plugin uses [mime-types](https://www.npmjs.com/package/mime-types) to make a best guess at file mime types as they are uploaded to S3. This means your files should arrive in S3, ready to be served as a static assets without having to manually define the types.
+
+### AWS Credentials
+
+The standard AWS credential chain of precedence is followed when making AWS calls. [@aws-sdk/credential-provider-node]() is used to to load these values, so that documentation should be used when setting up AWS credentials. In most cases, simply having the proper environment variables or valid credentials in your `~/.aws/credentials` file should be enough to get going. There is an optional `profile` argument that can be used if you wish to use a non-default set of credentials.
+
 ### Properties
 
 | Name        | Description                                                                                                                                             |
@@ -54,10 +62,6 @@ Add the executor to the `target` section of `project.json`.
   }
 ```
 
-### Uploaded Bucket Object `content-type`
-
-This plugin uses [mime-types](https://www.npmjs.com/package/mime-types) to make a best guess at file mime types as they are uploaded to S3. This means your files should arrive in S3, ready to be served as a static assets without having to manually define the types.
-
 ### Static S3 Bucket Name
 
 If you are directly targetting an S3 bucket, you can simply enter the name of the S3 bucket as the `bucketName` parameter in the NX task definition.
@@ -80,7 +84,7 @@ If you prepend your `bucketName` with `cfe:`, this executor will attempt to loca
 
 - If an export is found with a matching name, the value will be used for the S3 destination bucket.
 - If an export is not found, an error will be thrown and no files will be uploaded.
-- **Matching is _not_ case-sensitive.**
+- **Matching is case-sensitive.**
 - This export must exist in the same account as the S3 bucket.
   - Cross-account lookup is not supported.
 

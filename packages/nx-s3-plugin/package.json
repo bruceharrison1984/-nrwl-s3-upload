@@ -5,11 +5,11 @@
     "s3",
     "sync"
   ],
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "src/index.js",
   "executors": "./executors.json",
   "license": "MIT",
-  "description": "Collection of NX executors that can perform operations on S3 buckets",
+  "description": "Utilities for managing S3 with NX. Includes sync'ing local directories with remote S3 buckets.",
   "repository": {
     "url": "https://github.com/bruceharrison1984/nx-s3-plugin"
   }
