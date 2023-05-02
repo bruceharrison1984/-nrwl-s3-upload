@@ -28,6 +28,10 @@ The `sync` executor is similar to the `aws s3 sync` command. It will run a diff 
 
 This plugin uses [mime-types](https://www.npmjs.com/package/mime-types) to make a best guess at file mime types as they are uploaded to S3. This means your files should arrive in S3, ready to be served as a static assets without having to manually define the types.
 
+### AWS Credentials
+
+The standard AWS credential chain of precedence is followed when making AWS calls. [@aws-sdk/credential-provider-node]() is used to to load these values, so that documentation should be used when setting up AWS credentials. In most cases, simply having the proper environment variables or valid credentials in your `~/.aws/credentials` file should be enough to get going. There is an optional `profile` argument that can be used if you wish to use a non-default set of credentials.
+
 ### Properties
 
 | Name        | Description                                                                                                                                             |
