@@ -17,14 +17,11 @@ export class BucketNameService {
   async resolveBucketName(bucketName: string) {
     const matches = bucketName.match(/^(.{3}):(.*)$/);
     const result: BucketNameResult = {
-      bucketName,
+      bucketName: `s3://${bucketName}`,
       requiresLookup: false,
     };
 
-    if (!matches) {
-      result.bucketName = `s3://${bucketName}`;
-      return result;
-    }
+    if (!matches) return result;
 
     result.requiresLookup = true;
     result.lookupType = matches[1].toLocaleLowerCase();
@@ -33,6 +30,16 @@ export class BucketNameService {
     const resolver = this._resolvers.find(
       (x) => x.resolverType === result.lookupType
     );
+
+    if (!resolver)
+      throw new Error(
+        `Resolver of type '${
+          result.lookupType
+        }' could not be found. Only the following resolvers are currently supported ${this._resolvers
+          .map((x) => x.resolverType)
+          .join(',')}`
+      );
+
     const resolvedBucket = await resolver.resolve(result.lookupKey);
 
     result.bucketName = `s3://${resolvedBucket}`;
