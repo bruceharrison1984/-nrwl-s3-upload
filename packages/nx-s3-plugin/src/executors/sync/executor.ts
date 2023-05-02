@@ -1,10 +1,10 @@
+import { BucketNameService } from './services/BucketNameService';
 import { BuildExecutorSchema } from './schema';
+import { CredentialsService } from './services/CredentialsService';
 import { Executor } from '@nrwl/devkit';
 import { Presets, SingleBar } from 'cli-progress';
 import { S3Client } from '@aws-sdk/client-s3';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
-import { getCloudFormationExportValue } from './cloudformationExportLookup';
-import { getSsmParameterStoreValue } from './ssmParameterLookup';
 import { lookup } from 'mime-types';
 import S3SyncClient from 's3-sync-client';
 import recursive from 'recursive-readdir';
@@ -29,43 +29,18 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
       'File list contains no files. Please specify a different directory. '
     );
 
-  let bucketUrl = `s3://${bucketName.trim()}`;
-  const matches = bucketName.match(/^(.{3}):(.*)$/);
-  if (matches) {
-    switch (matches[1].toLowerCase()) {
-      case 'cfe': {
-        const cfExportBucket = await getCloudFormationExportValue(
-          matches[2],
-          region,
-          profile
-        );
-        bucketUrl = `s3://${cfExportBucket}`;
-        break;
-      }
-      case 'ssm': {
-        const ssmParamValue = await getSsmParameterStoreValue(
-          matches[2],
-          region,
-          profile
-        );
-        bucketUrl = `s3://${ssmParamValue}`;
-        break;
-      }
-      default:
-        throw new Error(
-          'Unknown bucketUrl prefix. Only cfe and ssm are supported.'
-        );
-    }
-  }
+  const credentials = new CredentialsService(profile);
+  const bucketNameService = new BucketNameService(credentials, region);
+  const resolvedBucket = await bucketNameService.resolveBucketName(bucketName);
 
   let headerText = `- Bucket Name: ${bucketName}`;
-  if (matches)
-    headerText = `- Lookup Key: ${matches[2]}
-    - Lookup Type: ${matches[1].toLocaleLowerCase()}`;
+  if (resolvedBucket.requiresLookup)
+    headerText = `- Lookup Key: ${resolvedBucket.lookupKey}
+    - Lookup Type: ${resolvedBucket.lookupType}`;
 
   console.log(`
   ${headerText}
-  - Destination S3 Url: ${bucketUrl}
+  - Destination S3 Url: ${resolvedBucket.bucketName}
   - Source directory: ${sourceFiles}
     - Total files: ${fileList.length}
   - Batch size: ${batchSize}
@@ -101,7 +76,7 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
 
   let results;
   try {
-    results = await sync(sourceFiles, bucketUrl, {
+    results = await sync(sourceFiles, resolvedBucket.bucketName, {
       del: deleteFiles,
       monitor,
       maxConcurrentTransfers: batchSize,
