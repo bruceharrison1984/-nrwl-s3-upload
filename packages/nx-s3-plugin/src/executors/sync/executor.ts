@@ -3,6 +3,7 @@ import { BuildExecutorSchema } from './schema';
 import { CredentialsService } from './services/CredentialsService';
 import { Executor } from '@nrwl/devkit';
 import { SyncService } from './services/SyncService';
+import { Table } from 'console-table-printer';
 import recursive from 'recursive-readdir';
 
 const runExecutor: Executor<BuildExecutorSchema> = async ({
@@ -14,7 +15,6 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
   progress = true,
   deleteFiles = true,
 }) => {
-  console.log('-= Running S3 Sync Executor =-');
   if (!bucketName || bucketName.trim() === '')
     throw new Error('bucketName is a required argument');
 
@@ -30,21 +30,36 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
   const resolvedBucket = await bucketNameService.resolveBucketName(bucketName);
   const syncService = new SyncService(credentials.credentials, region);
 
-  let headerText = `- Bucket Name: ${bucketName}`;
-  if (resolvedBucket.requiresLookup)
-    headerText = `- Lookup Key: ${resolvedBucket.lookupKey}
-    - Lookup Type: ${resolvedBucket.lookupType}`;
+  const detailsTable = new Table({
+    title: 'S3 Sync Settings',
+  });
 
-  console.log(`
-  ${headerText}
-  - Destination S3 Url: ${resolvedBucket.bucketName}
-  - Source directory: ${sourceFiles}
-    - Total files: ${fileList.length}
-  - Batch size: ${batchSize}
-  - Deletion: ${deleteFiles ? 'ENABLED' : 'DISABLED'}
-  - AWS profile: ${profile ? profile : 'DEFAULT'}
-  - AWS region: ${region ? region : 'DEFAULT'}
-  `);
+  detailsTable.addRows(
+    [
+      { property: 'Destination S3 Url', value: resolvedBucket.bucketName },
+      { property: 'Source directory', value: sourceFiles },
+      { property: 'Total files', value: fileList.length },
+    ],
+    { color: 'green' }
+  );
+  if (resolvedBucket.requiresLookup)
+    detailsTable.addRows(
+      [
+        { property: 'Lookup Key', value: resolvedBucket.lookupKey },
+        { property: 'Lookup Type', value: resolvedBucket.lookupType },
+      ],
+      { color: 'yellow' }
+    );
+  detailsTable.addRows(
+    [
+      { property: 'Batch size', value: batchSize },
+      { property: 'Deletion', value: deleteFiles ? 'enabled' : 'disabled' },
+      { property: 'AWS profile', value: profile ? profile : 'default' },
+      { property: 'AWS region', value: region ? region : 'default' },
+    ],
+    { color: 'blue' }
+  );
+  detailsTable.printTable();
 
   const results = await syncService.sync(
     sourceFiles,
@@ -55,11 +70,19 @@ const runExecutor: Executor<BuildExecutorSchema> = async ({
   );
 
   console.log(' ');
-  console.log(`
--= S3 Sync Results =-
-  - Uploads: ${results.uploads.length}
-  - Deletions: ${results.deletions.length}
-  `);
+
+  const resultsTable = new Table({
+    title: 'S3 Sync Results',
+  });
+  resultsTable.addRows(
+    [{ property: 'Uploads', value: results.uploads.length }],
+    { color: 'green' }
+  );
+  resultsTable.addRows(
+    [{ property: 'Deletions', value: results.deletions.length }],
+    { color: 'red' }
+  );
+  resultsTable.printTable();
 
   return {
     success: true,
