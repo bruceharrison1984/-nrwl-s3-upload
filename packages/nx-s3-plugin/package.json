@@ -9,7 +9,7 @@
   "main": "src/index.js",
   "executors": "./executors.json",
   "license": "MIT",
-  "description": "Fast bucket sync uploads to S3 buckets",
+  "description": "Utilities for managing S3 with NX. Includes sync'ing local directories with remote S3 buckets.",
   "repository": {
     "url": "https://github.com/bruceharrison1984/nx-s3-plugin"
   }
