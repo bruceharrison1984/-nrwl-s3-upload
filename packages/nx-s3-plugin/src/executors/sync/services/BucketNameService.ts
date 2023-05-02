@@ -1,8 +1,8 @@
 import { BucketNameResolver } from '../types/BucketNameResolver';
 import { BucketNameResult } from '../types/BucketNameResult';
-import { CloudFormationResolver } from './CloudFormationResolver';
+import { CloudFormationResolver } from '../resolvers/CloudFormationResolver';
 import { CredentialsService } from './CredentialsService';
-import { SsmParameterResolver } from './SsmParameterResolver';
+import { SsmParameterResolver } from '../resolvers/SsmParameterResolver';
 
 export class BucketNameService {
   private _resolvers: BucketNameResolver[] = [];
